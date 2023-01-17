@@ -39,6 +39,14 @@ class TravelLogController extends Controller
     public function store(Request $request)
     {
         // logic untuk tambah data
+        TravelLog::create([
+            'date'          => $request->date,
+            'time'          => $request->time,
+            'location'      => $request->location,
+            'temperature'   => $request->temperature
+        ]);
+
+        return redirect()->route('travel.index');
     }
 
     /**
@@ -50,6 +58,9 @@ class TravelLogController extends Controller
     public function show($id)
     {
         // untuk menampilkan single data / data tertentu
+        $travel_log = TravelLog::find($id);
+
+        return view('travel.show', compact('travel_log'));
     }
 
     /**
@@ -61,6 +72,9 @@ class TravelLogController extends Controller
     public function edit($id)
     {
         // untuk menampilkan view form ubah data
+        $travel_log = TravelLog::find($id);
+
+        return view('travel.edit', compact('travel_log'));
     }
 
     /**
@@ -73,6 +87,15 @@ class TravelLogController extends Controller
     public function update(Request $request, $id)
     {
         // logic untuk ubah data
+        $travel_log = TravelLog::find($id);
+        $travel_log->date           = $request->date;
+        $travel_log->time           = $request->time;
+        $travel_log->location       = $request->location;
+        $travel_log->temperature    = $request->temperature;
+
+        $travel_log->save();
+
+        return redirect()->route('travel.index');
     }
 
     /**
@@ -84,5 +107,9 @@ class TravelLogController extends Controller
     public function destroy($id)
     {
         // logic untuk hapus data
+        $travel_log = TravelLog::find($id);
+        $travel_log->delete();
+
+        return redirect()->route('travel.index');
     }
 }
